@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Users, Swords, Trophy, Activity } from 'lucide-react'
-import { leaderboardApi, matchesApi } from '../services/api'
-import { GlobalStats, Match } from '../types'
+import { leaderboardApi, matchesApi } from '../../services/api'
+import { GlobalStats, Match } from '../../types'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
