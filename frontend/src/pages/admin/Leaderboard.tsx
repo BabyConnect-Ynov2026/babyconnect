@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Trophy, TrendingUp } from 'lucide-react'
-import { leaderboardApi } from '../services/api'
-import { LeaderboardEntry } from '../types'
+import { leaderboardApi } from '../../services/api'
+import { LeaderboardEntry } from '../../types'
 
 const medals = ['🥇', '🥈', '🥉']
 
