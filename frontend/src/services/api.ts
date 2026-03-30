@@ -1,3 +1,13 @@
+import type {
+  GlobalStats,
+  LeaderboardEntry,
+  Match,
+  Player,
+  Reservation,
+  Table,
+  Tournament,
+} from '../types'
+
 const API_BASE_URL = '/api/v1'
 
 type QueryValue = string | number | boolean | null | undefined
@@ -91,13 +101,80 @@ const api = {
     request<T>(path, { body, method: 'POST' }),
 }
 
+type MessageResponse = {
+  message: string
+}
+
+type PlayersResponse = {
+  count: number
+  players: Player[]
+}
+
+type PlayerResponse = {
+  player: Player
+}
+
+type PlayerStatsResponse = {
+  player: Player
+  recent_matches: Match[]
+  win_rate: number
+}
+
+type MatchesResponse = {
+  count: number
+  matches: Match[]
+}
+
+type MatchResponse = {
+  match: Match
+}
+
+type ReservationsResponse = {
+  count: number
+  reservations: Reservation[]
+}
+
+type ReservationResponse = {
+  reservation: Reservation
+}
+
+type TablesResponse = {
+  count: number
+  tables: Table[]
+}
+
+type TournamentsResponse = {
+  count: number
+  tournaments: Tournament[]
+}
+
+type TournamentResponse = {
+  tournament: Tournament
+}
+
+type TournamentParticipant = {
+  id: number
+  player?: Player
+  player_id: number
+  tournament_id: number
+}
+
+type TournamentDetailsResponse = {
+  participants: TournamentParticipant[]
+  tournament: Tournament
+}
+
+type LeaderboardResponse = {
+  leaderboard: LeaderboardEntry[]
+}
+
 // Players
 export const playersApi = {
   register: (data: { username: string; email: string; password: string; full_name: string }) =>
-    api.post('/players/register', data),
-  getAll: () => api.get('/players'),
-  getById: (id: number) => api.get(`/players/${id}`),
-  getStats: (id: number) => api.get(`/players/${id}/stats`),
+    api.post<PlayerResponse>('/players/register', data),
+  getAll: () => api.get<PlayersResponse>('/players'),
+  getById: (id: number) => api.get<PlayerResponse>(`/players/${id}`),
+  getStats: (id: number) => api.get<PlayerStatsResponse>(`/players/${id}/stats`),
 }
 
 // Matches
@@ -108,12 +185,12 @@ export const matchesApi = {
     red_team_id_2?: number
     blue_team_id_1: number
     blue_team_id_2?: number
-  }) => api.post('/matches', data),
-  getAll: () => api.get('/matches'),
-  getById: (id: number) => api.get(`/matches/${id}`),
+  }) => api.post<MatchResponse>('/matches', data),
+  getAll: () => api.get<MatchesResponse>('/matches'),
+  getById: (id: number) => api.get<MatchResponse>(`/matches/${id}`),
   updateScore: (id: number, red: number, blue: number) =>
-    api.patch(`/matches/${id}/score`, { red_score: red, blue_score: blue }),
-  finish: (id: number) => api.post(`/matches/${id}/finish`),
+    api.patch<MatchResponse>(`/matches/${id}/score`, { red_score: red, blue_score: blue }),
+  finish: (id: number) => api.post<MatchResponse>(`/matches/${id}/finish`),
 }
 
 // Reservations
@@ -124,31 +201,31 @@ export const reservationsApi = {
     start_time: string
     end_time: string
     notes?: string
-  }) => api.post('/reservations', data),
+  }) => api.post<ReservationResponse>('/reservations', data),
   getAll: (params?: { table_id?: number; player_id?: number }) =>
-    api.get('/reservations', { params }),
-  cancel: (id: number) => api.delete(`/reservations/${id}`),
+    api.get<ReservationsResponse>('/reservations', { params }),
+  cancel: (id: number) => api.delete<MessageResponse>(`/reservations/${id}`),
 }
 
 // Tables
 export const tablesApi = {
-  getAll: () => api.get('/tables'),
+  getAll: () => api.get<TablesResponse>('/tables'),
 }
 
 // Tournaments
 export const tournamentsApi = {
   create: (data: { name: string; description?: string; max_players?: number }) =>
-    api.post('/tournaments', data),
-  getAll: () => api.get('/tournaments'),
-  getById: (id: number) => api.get(`/tournaments/${id}`),
+    api.post<TournamentResponse>('/tournaments', data),
+  getAll: () => api.get<TournamentsResponse>('/tournaments'),
+  getById: (id: number) => api.get<TournamentDetailsResponse>(`/tournaments/${id}`),
   join: (tournamentId: number, playerId: number) =>
-    api.post(`/tournaments/${tournamentId}/join`, { player_id: playerId }),
+    api.post<MessageResponse>(`/tournaments/${tournamentId}/join`, { player_id: playerId }),
 }
 
 // Leaderboard & Stats
 export const leaderboardApi = {
-  get: () => api.get('/leaderboard'),
-  getStats: () => api.get('/stats'),
+  get: () => api.get<LeaderboardResponse>('/leaderboard'),
+  getStats: () => api.get<GlobalStats>('/stats'),
 }
 
 export default api
