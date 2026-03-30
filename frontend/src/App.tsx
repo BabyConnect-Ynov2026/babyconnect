@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import Dashboard from './pages/Dashboard'
-import Leaderboard from './pages/Leaderboard'
-import Reservations from './pages/Reservations'
-import Tournaments from './pages/Tournaments'
-import Matches from './pages/Matches'
-import Players from './pages/Players'
+import Dashboard from './pages/admin/Dashboard'
+import Leaderboard from './pages/admin/Leaderboard'
+import Reservations from './pages/admin/Reservations'
+import Tournaments from './pages/admin/Tournaments'
+import Matches from './pages/admin/Matches'
+import Players from './pages/admin/Players'
 
 export default function App() {
   return (
