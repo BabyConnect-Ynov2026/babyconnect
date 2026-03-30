@@ -1,4 +1,4 @@
-# Compte-rendu — Nicolas Gouy — B3 DEV
+# Compte-rendu — Nicolas Gouy — B3 IADATA
 
 **Challenge 48h Ynov Toulouse 2026 — Babyfoot du futur**
 

@@ -8,5 +8,5 @@ Chaque membre doit créer son compte-rendu avec le format : `prenom-nom-compte-r
 
 ## Membres
 
-- [Nicolas Gouy — B3 DEV](./nicolas-gouy-compte-rendu.md)
+- [Nicolas Gouy — B3 IADATA](./nicolas-gouy-compte-rendu.md)
 - `prenom-nom-compte-rendu.md` ← À remplir par chaque membre
