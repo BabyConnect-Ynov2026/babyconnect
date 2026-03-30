@@ -7,7 +7,7 @@
 **Challenge 48h · Babyfoot du futur**
 
 [![CI](https://github.com/BabyConnect-Ynov2026/babyconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/BabyConnect-Ynov2026/babyconnect/actions)
-![Go](https://img.shields.io/badge/Go-1.22-00ADD8?logo=go)
+![Go](https://img.shields.io/badge/Go-1.21-00ADD8?logo=go)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)
 
@@ -78,7 +78,7 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 | Layer | Technologies |
 |-------|-------------|
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| Backend | Go 1.22, Gin, GORM |
+| Backend | Go 1.21, Gin, GORM |
 | Base de données | PostgreSQL 16 |
 | Déploiement | Docker, Docker Compose |
 | CI/CD | GitHub Actions |
@@ -87,7 +87,7 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 
 ### Prérequis
 - [Docker](https://www.docker.com/) + Docker Compose
-- [Go 1.22+](https://go.dev/) (pour le dev local)
+- [Go 1.21+](https://go.dev/) (pour le dev local)
 - [Node.js 20+](https://nodejs.org/) (pour le dev local)
 
 ### Démarrage rapide (Docker)
