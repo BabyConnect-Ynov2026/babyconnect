@@ -90,8 +90,11 @@ export default function Players() {
                 required />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1">Mot de passe</label>
+              <label className="block text-sm text-gray-400 mb-1">
+                Mot de passe <span className="text-gray-600">(6 caractères min.)</span>
+              </label>
               <input type="password" className="input" placeholder="••••••"
+                minLength={6}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 required />
