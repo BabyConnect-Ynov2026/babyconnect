@@ -8,7 +8,7 @@
 ## Installation en 3 commandes
 
 ```bash
-git clone https://github.com/YOUR_ORG/babyconnect.git
+git clone https://github.com/BabyConnect-Ynov2026/babyconnect.git
 cd babyconnect
 cp .env.example .env
 docker compose up -d
