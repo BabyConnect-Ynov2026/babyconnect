@@ -6,7 +6,7 @@
 
 **Challenge 48h · Babyfoot du futur**
 
-[![CI](https://github.com/YOUR_ORG/babyconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_ORG/babyconnect/actions)
+[![CI](https://github.com/BabyConnect-Ynov2026/babyconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/BabyConnect-Ynov2026/babyconnect/actions)
 ![Go](https://img.shields.io/badge/Go-1.22-00ADD8?logo=go)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)
@@ -90,7 +90,7 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 
 ```bash
 # 1. Cloner le repo
-git clone https://github.com/YOUR_ORG/babyconnect.git
+git clone https://github.com/BabyConnect-Ynov2026/babyconnect.git
 cd babyconnect
 
 # 2. Configurer l'environnement
@@ -140,14 +140,14 @@ npm run dev
 
 | Repo | Description |
 |------|-------------|
-| [babyconnect](https://github.com/YOUR_ORG/babyconnect) | Application principale (ce repo) |
-| [DOCUMENTATION](https://github.com/YOUR_ORG/DOCUMENTATION) | Documentation technique et utilisateur |
-| [COMPTES-RENDUS](https://github.com/YOUR_ORG/COMPTES-RENDUS) | Comptes rendus individuels |
-| [INSTRUCTIONS](https://github.com/YOUR_ORG/INSTRUCTIONS) | Instructions du challenge (fork) |
+| [babyconnect](https://github.com/BabyConnect-Ynov2026/babyconnect) | Application principale (ce repo) |
+| [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION) | Documentation technique et utilisateur |
+| [COMPTES-RENDUS](https://github.com/BabyConnect-Ynov2026/COMPTES-RENDUS) | Comptes rendus individuels |
+| [INSTRUCTIONS](https://github.com/BabyConnect-Ynov2026/INSTRUCTIONS) | Instructions du challenge (fork) |
 
 ## Documentation
 
-La documentation complète est disponible dans le repository [DOCUMENTATION](https://github.com/YOUR_ORG/DOCUMENTATION).
+La documentation complète est disponible dans le repository [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION).
 
 ---
 
