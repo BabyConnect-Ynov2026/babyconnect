@@ -23,23 +23,27 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 
 **Nom : BabyConnect Corp**
 
-### Equipe 1 — Dev & Infra
+### Equipe 1 — Suffix
 
 | Prénom NOM | Filière | Rôle |
 |------------|---------|------|
-| Nicolas GOUY | B3 DEV | Lead Backend / Go API |
-| Prénom NOM | B3 DEV | Frontend React |
-| Prénom NOM | B2 INFO | DevOps / Docker |
-| Prénom NOM | B1 INFRA | Infrastructure |
-| Prénom NOM | B1 INFO | Frontend |
+| Dylan HEBRARD | B3 DEV | Lead Backend / Go API |
+| Cédric RIGHI | B3 DEV | Frontend React |
+| Nohaeila LAGHALID | B3 DEV | DevOps / Docker |
+| Erwann VARLET | B3 DEV | Infrastructure |
+| Ingrid LARE | B3 DEV | Frontend |
+| Ioané SULASHVILI | B3 DEV | Data / Stats |
+| Maël LOPEZ | B3 DEV | Backend / ELO |
 
-### Equipe 2 — Data & IA
+### Equipe 2 — SaSure
 
 | Prénom NOM | Filière | Rôle |
 |------------|---------|------|
-| Prénom NOM | B3 IADATA | Data Analyst |
-| Prénom NOM | B2 IADATA | ML / Statistiques |
-| Prénom NOM | B1 IADATA | Visualisation |
+| Nicolas GOUY | B3 IADATA | Data Analyst |
+| Hilary Capriaty KAMSU | B3 IADATA | ML / Statistiques |
+| Corentin BEDO | B3 INFRA | Infrastructure |
+| Guillaume MARDINLI | B3 INFRA | DevOps / CI/CD |
+| Mathys COLOMBO | B3 INFRA | Backend / API |
 
 ---
 
@@ -60,11 +64,11 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 ┌─────────────────────────────────────────────────────────┐
 │                     BabyConnect                         │
 │                                                         │
-│   ┌─────────────┐    ┌──────────────┐    ┌──────────┐  │
-│   │   Frontend   │───▶│   Backend    │───▶│  Postgres │  │
-│   │  React + TS  │    │   Go + Gin   │    │    DB    │  │
-│   │  Tailwind    │◀───│  REST API    │◀───│          │  │
-│   └─────────────┘    └──────────────┘    └──────────┘  │
+│   ┌──────────────┐     ┌──────────────┐    ┌──────────┐ │
+│   │   Frontend   │───▶│   Backend    │───▶│ Postgres │ │
+│   │  React + TS  │     │   Go + Gin   │    │    DB    │ │
+│   │  Tailwind    │◀───│  REST API    │◀───│          │ │
+│   └──────────────┘     └──────────────┘    └──────────┘ │
 │         :3000               :8080             :5432     │
 └─────────────────────────────────────────────────────────┘
 ```
