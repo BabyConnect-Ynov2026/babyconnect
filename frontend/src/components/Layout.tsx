@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   Trophy,
@@ -10,15 +9,15 @@ import {
 } from 'lucide-react'
 
 const navItems = [
-  { href: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/leaderboard', icon: Trophy, label: 'Classement' },
-  { href: '/matches', icon: Swords, label: 'Matchs' },
-  { href: '/reservations', icon: Calendar, label: 'Réservations' },
-  { href: '/tournaments', icon: Target, label: 'Tournois' },
-  { href: '/players', icon: Users, label: 'Joueurs' },
+  { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/admin/leaderboard', icon: Trophy, label: 'Classement' },
+  { href: '/admin/matches', icon: Swords, label: 'Matchs' },
+  { href: '/admin/reservations', icon: Calendar, label: 'Réservations' },
+  { href: '/admin/tournaments', icon: Target, label: 'Tournois' },
+  { href: '/admin/players', icon: Users, label: 'Joueurs' },
 ]
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout() {
   const location = useLocation()
 
   return (
@@ -64,7 +63,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       {/* Main content */}
       <main className="flex-1 ml-64 p-8">
-        {children}
+        <Outlet />
       </main>
     </div>
   )
