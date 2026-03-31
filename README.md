@@ -150,6 +150,18 @@ npm run build
 npm run start
 ```
 
+## Modules prototypes
+
+Le dépôt contient aussi un module Python autonome de vision dans [`modules/babyconnect-ai`](./modules/babyconnect-ai).
+
+Ce module est volontairement isolé du backend et du frontend principaux pour ne pas perturber l'application existante. Il permet de tester :
+
+- la capture de flux vidéo
+- la détection de balle et de buts
+- l'exposition d'événements via API Flask et WebSocket
+
+Il se lance séparément du reste du projet.
+
 ## API Endpoints
 
 | Méthode | Endpoint | Description |
