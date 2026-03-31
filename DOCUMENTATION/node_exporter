@@ -1,0 +1,21 @@
+- **Node Exporter** collecte les métriques matérielles et système de la machine hôte pour les exposer à **Prometheus**.
+
+Dans le ``Docker-compose.yml``
+
+```
+node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+    ports:
+      - "9100:9100"
+      
+```
