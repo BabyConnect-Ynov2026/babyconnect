@@ -1,188 +1,157 @@
-<div align="center">
-
 # BabyConnect
 
-### Plateforme connectée de babyfoot — Ynov Toulouse 2026
+Plateforme de gestion de babyfoot avec :
+- un frontend React + TypeScript
+- un backend Express + TypeScript
+- une base PostgreSQL
+- une orchestration Docker Compose
 
-**Challenge 48h · Babyfoot du futur**
-
-[![CI](https://github.com/BabyConnect-Ynov2026/babyconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/BabyConnect-Ynov2026/babyconnect/actions)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
-![Prisma](https://img.shields.io/badge/Prisma-7-2D3748?logo=prisma)
-
-</div>
-
----
-
-## Contexte
-
-Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plateforme web complète pour moderniser et digitaliser l'usage des babyfoots du Souk, conçue pour les ~1000 étudiants d'Ynov Toulouse.
-
-## Entreprise
-
-**Nom : BabyConnect Corp**
-
-### Equipe 1 — Suffix
-
-| Prénom NOM | Filière | Rôle |
-|------------|---------|------|
-| Dylan HEBRARD | B3 DEV | Lead Backend / Go API |
-| Cédric RIGHI | B3 DEV | Frontend React |
-| Nohaeila LAGHALID | B3 DEV | DevOps / Docker |
-| Erwann VARLET | B3 DEV | Infrastructure |
-| Ingrid LARE | B3 DEV | Frontend |
-| Ioané SULASHVILI | B3 DEV | Data / Stats |
-| Maël LOPEZ | B3 DEV | Backend / ELO |
-
-### Equipe 2 — SaSure
-
-| Prénom NOM | Filière | Rôle |
-|------------|---------|------|
-| Nicolas GOUY | B3 IADATA | Data Analyst |
-| Hilary Capriaty KAMSU | B3 IADATA | ML / Statistiques |
-| Corentin BEDO | B3 INFRA | Infrastructure |
-| Guillaume MARDINLI | B3 INFRA | DevOps / CI/CD |
-| Mathys COLOMBO | B3 INFRA | Backend / API |
-
----
-
-## Fonctionnalités
-
-| Module | Description |
-|--------|-------------|
-| **Réservations** | Réserver une table en quelques clics, gestion des conflits en temps réel |
-| **Matchs Live** | Enregistrement des scores en direct avec mise à jour instantanée |
-| **Leaderboard ELO** | Classement dynamique avec système de rating ELO (comme les échecs) |
-| **Tournois** | Création et gestion de tournois avec brackets automatiques |
-| **Stats joueurs** | Profils détaillés : W/L ratio, buts, historique |
-| **Dashboard** | Vue d'ensemble en temps réel de l'activité babyfoot |
+Le projet permet de gerer les joueurs, les matchs, les reservations, les tables, les tournois et le classement.
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                     BabyConnect                         │
-│                                                         │
-│   ┌──────────────┐     ┌──────────────┐    ┌──────────┐ │
-│   │   Frontend   │───▶│   Backend    │───▶│ Postgres │ │
-│   │  React + TS  │     │ Express + TS │    │    DB    │ │
-│   │  Tailwind    │◀───│ Prisma + REST │◀───│          │ │
-│   └──────────────┘     └──────────────┘    └──────────┘ │
-│         :3000               :8080             :5432     │
-└─────────────────────────────────────────────────────────┘
+```text
+babyconnect/
+|- frontend/         Application React + Vite
+|- backend/          API Express + Prisma
+|- DOCUMENTATION/    Documentation technique et guides
+|- COMPTES-RENDUS/   Comptes-rendus de projet
+|- docker-compose.yml
+|- .env.example
+`- README.md
 ```
 
-## Stack technique
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
 
-| Layer | Technologies |
-|-------|-------------|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| Backend | TypeScript, Express, Prisma |
-| Base de données | PostgreSQL 16 |
-| Déploiement | Docker, Docker Compose |
-| CI/CD | GitHub Actions |
+Pages principales :
+- accueil
+- authentification
+- profil
+- dashboard admin
+- leaderboard
+- reservations
+- tournois
+- matchs
+- joueurs
 
-## Lancer le projet
+### Backend
+- Express
+- TypeScript
+- Prisma
+- PostgreSQL
+- JWT pour l'authentification
 
-### Prérequis
-- [Node.js 20+](https://nodejs.org/)
-- [npm](https://www.npmjs.com/)
-- [Docker](https://www.docker.com/) + Docker Compose (optionnel, pratique pour Postgres)
+Le backend expose ses routes sous ` /api/v1 `.
 
-### Etat actuel du démarrage
+Domaines couverts :
+- auth
+- players
+- matches
+- reservations
+- tables
+- tournaments
+- leaderboard
 
-Le backend du repo n'est plus en Go: il est maintenant en **TypeScript / Express / Prisma** dans [backend/](./backend).
+## Prerequis
 
-Important:
-- le fichier [`.env.example`](./.env.example) à la racine sert surtout au `docker compose`
-- pour lancer l'API en local, il faut utiliser [`backend/.env.example`](./backend/.env.example)
-- le `docker compose up -d` complet n'est **pas** la bonne méthode pour démarrer le backend dans l'etat actuel du repo
+- Node.js 20+ recommande
+- npm
+- Docker et Docker Compose pour le lancement conteneurise
+- PostgreSQL si lancement local sans Docker
 
-### Base de donnees (Docker recommande)
+## Demarrage rapide avec Docker
 
-```bash
-git clone https://github.com/BabyConnect-Ynov2026/babyconnect.git
-cd babyconnect
+1. Copier le fichier d'environnement :
 
-# Configuration Docker (si besoin)
-cp .env.example .env
-
-# Demarrer uniquement Postgres
-docker compose up -d db
+```powershell
+Copy-Item .env.example .env
 ```
 
-### Backend local
+2. Demarrer la stack :
 
-```bash
+```powershell
+docker compose up --build
+```
+
+3. Acceder aux services :
+- frontend : `http://localhost`
+- backend : `http://localhost:8080/api/v1/health`
+- PostgreSQL : `localhost:5432`
+
+## Demarrage local
+
+### Backend
+
+```powershell
 cd backend
-
-# 1. Configurer l'environnement du backend
-cp .env.example .env
-
-# 2. Installer les dependances
 npm install
-
-# 3. Generer / synchroniser Prisma avec la base
-npm run prisma:push
-
-# 4. Lancer l'API
+npm run prisma:generate
 npm run dev
-
-# API: http://localhost:8080/api/v1
 ```
 
-### Frontend local
+Le backend demarre par defaut sur `http://localhost:8080`.
 
-```bash
+### Frontend
+
+```powershell
 cd frontend
 npm install
 npm run dev
-# Frontend: http://localhost:3000
 ```
 
-### Build backend
+Le frontend Vite demarre generalement sur `http://localhost:5173`.
 
-```bash
-cd backend
-npm install
-npm run build
-npm run start
+## Variables d'environnement
+
+Le fichier [`.env.example`](./.env.example) contient les variables principales :
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
+- `DATABASE_URL`
+- `SERVER_PORT`
+- `JWT_SECRET`
+
+## API principale
+
+Base URL : `http://localhost:8080/api/v1`
+
+Exemples de routes :
+- `GET /health`
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
+- `GET /players`
+- `GET /matches`
+- `POST /reservations`
+- `GET /tables`
+- `GET /tables/live`
+- `GET /leaderboard`
+- `GET /stats`
+
+## Documentation du projet
+
+Documentation complementaire disponible dans :
+- [`DOCUMENTATION/architecture.md`](./DOCUMENTATION/architecture.md)
+- [`DOCUMENTATION/api.md`](./DOCUMENTATION/api.md)
+- [`DOCUMENTATION/installation.md`](./DOCUMENTATION/installation.md)
+- [`DOCUMENTATION/guide-utilisateur.md`](./DOCUMENTATION/guide-utilisateur.md)
+- [`COMPTES-RENDUS/README.md`](./COMPTES-RENDUS/README.md)
+
+## Workflow recommande pour contribuer
+
+```powershell
+git checkout -b docs/readme-cleanup
+git add README.md
+git commit -m "docs: update repository README"
+git push -u origin docs/readme-cleanup
 ```
 
-## API Endpoints
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| `GET` | `/api/v1/health` | Santé de l'API |
-| `GET` | `/api/v1/leaderboard` | Classement ELO |
-| `GET` | `/api/v1/stats` | Statistiques globales |
-| `POST` | `/api/v1/players/register` | Inscrire un joueur |
-| `GET` | `/api/v1/players` | Liste des joueurs |
-| `POST` | `/api/v1/matches` | Créer un match |
-| `PATCH` | `/api/v1/matches/:id/score` | Mettre à jour le score |
-| `POST` | `/api/v1/matches/:id/finish` | Terminer un match (calcul ELO) |
-| `POST` | `/api/v1/reservations` | Créer une réservation |
-| `GET` | `/api/v1/reservations` | Lister les réservations |
-| `POST` | `/api/v1/tournaments` | Créer un tournoi |
-| `POST` | `/api/v1/tournaments/:id/join` | S'inscrire à un tournoi |
-
-## Repositories de l'organisation
-
-| Repo | Description |
-|------|-------------|
-| [babyconnect](https://github.com/BabyConnect-Ynov2026/babyconnect) | Application principale (ce repo) |
-| [ynov-baby-vision](https://github.com/BabyConnect-Ynov2026/ynov-baby-vision) | Arbitrage IA — YOLOv8 + OpenCV, détection balle et buts |
-| [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION) | Documentation technique et utilisateur |
-| [COMPTES-RENDUS](https://github.com/BabyConnect-Ynov2026/COMPTES-RENDUS) | Comptes rendus individuels |
-| [INSTRUCTIONS](https://github.com/BabyConnect-Ynov2026/INSTRUCTIONS) | Instructions du challenge (fork) |
-
-## Documentation
-
-La documentation complète est disponible dans le repository [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION).
-
----
-
-<div align="center">
-<sub>Challenge 48h Ynov Toulouse 2026 — BabyConnect Corp</sub>
-</div>
+Ensuite, ouvrir une Pull Request vers la branche cible du projet.
