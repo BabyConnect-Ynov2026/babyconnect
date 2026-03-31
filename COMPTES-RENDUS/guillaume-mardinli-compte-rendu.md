@@ -22,6 +22,7 @@ Dans un premier temps j'ai participé a la recherche de fonctionnalités et de m
 - Initialisation du Raspberry 
 - Configuration du Raspberry afin d'y déployer l'application par la suite 
 - Installation et Configuration de Grafana + Prometheus + Node Exporter + Cadvisor) pour avoir une vue sur la santé du Raspberry et des conteneurs. 
+- Réalisation de documentations d'installation
 ---
 
 
