@@ -13,6 +13,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+
       <Route path="/leaderboard" element={<Navigate to="/admin/leaderboard" replace />} />
       <Route path="/reservations" element={<Navigate to="/admin/reservations" replace />} />
       <Route path="/tournaments" element={<Navigate to="/admin/tournaments" replace />} />

@@ -11,4 +11,7 @@ export type BabyfootCardData = {
   location: string;
   name: string;
   status: HomeTableStatus;
+  statusTone?: 'busy' | 'free'; 
+  occupancy?: string;
+  details?: any[];
 };
