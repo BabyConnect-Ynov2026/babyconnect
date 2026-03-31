@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
 import { calculateElo } from "../lib/elo";
+import { broadcastLiveTables } from "../lib/table-live";
 import { createMatchSchema, updateScoreSchema } from "../types/schemas";
-import { Match, Player } from "@prisma/client";
+import { Match } from "@prisma/client";
 
 const matchInclude = {
   redPlayer1: { omit: { password: true } },
-  redPlayer2: { omit: { password: true } },
   bluePlayer1: { omit: { password: true } },
-  bluePlayer2: { omit: { password: true } },
   table: true,
 } as const;
 
@@ -19,7 +18,7 @@ export async function createMatch(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  const { tableId, redTeamId1, redTeamId2, blueTeamId1, blueTeamId2, tournamentId } = parsed.data;
+  const { tableId, redTeamId1, blueTeamId1, tournamentId } = parsed.data;
 
   try {
     const [match] = await prisma.$transaction([
@@ -27,9 +26,7 @@ export async function createMatch(req: Request, res: Response): Promise<void> {
         data: {
           tableId,
           redTeamId1,
-          redTeamId2,
           blueTeamId1,
-          blueTeamId2,
           tournamentId,
           status: "ongoing",
           startedAt: new Date(),
@@ -42,6 +39,7 @@ export async function createMatch(req: Request, res: Response): Promise<void> {
       }),
     ]);
 
+    await broadcastLiveTables();
     res.status(201).json({ match });
   } catch {
     res.status(500).json({ error: "Failed to create match" });
@@ -150,6 +148,7 @@ export async function finishMatch(req: Request, res: Response): Promise<void> {
       data: { available: true },
     });
 
+    await broadcastLiveTables();
     res.status(200).json({ match: updated });
   } catch {
     res.status(500).json({ error: "Internal server error" });

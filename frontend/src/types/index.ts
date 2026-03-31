@@ -3,7 +3,6 @@ export interface Player {
   username: string
   email: string
   full_name: string
-  avatar_url?: string
   elo_rating: number
   wins: number
   losses: number
@@ -19,6 +18,15 @@ export interface Table {
   available: boolean
 }
 
+export type LiveTableStatus = 'free' | 'reserved' | 'occupied'
+
+export interface LiveTable {
+  id: number
+  location: string | null
+  name: string
+  status: LiveTableStatus
+}
+
 export type MatchStatus = 'pending' | 'ongoing' | 'completed'
 
 export interface Match {
@@ -27,12 +35,8 @@ export interface Match {
   table?: Table
   red_team_id_1: number
   red_player_1?: Player
-  red_team_id_2?: number
-  red_player_2?: Player
   blue_team_id_1: number
   blue_player_1?: Player
-  blue_team_id_2?: number
-  blue_player_2?: Player
   red_score: number
   blue_score: number
   status: MatchStatus

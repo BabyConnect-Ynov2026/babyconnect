@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
+import { broadcastLiveTables } from "../lib/table-live";
 import { createReservationSchema } from "../types/schemas";
 
 const reservationInclude = {
@@ -59,6 +60,7 @@ export async function createReservation(req: Request, res: Response): Promise<vo
       include: reservationInclude,
     });
 
+    await broadcastLiveTables();
     res.status(201).json({ reservation });
   } catch {
     res.status(500).json({ error: "Failed to create reservation" });
@@ -106,16 +108,8 @@ export async function cancelReservation(req: Request, res: Response): Promise<vo
       data: { status: "cancelled" },
     });
 
+    await broadcastLiveTables();
     res.status(200).json({ message: "Reservation cancelled" });
-  } catch {
-    res.status(500).json({ error: "Internal server error" });
-  }
-}
-
-export async function getTables(_req: Request, res: Response): Promise<void> {
-  try {
-    const tables = await prisma.table.findMany();
-    res.status(200).json({ tables, count: tables.length });
   } catch {
     res.status(500).json({ error: "Internal server error" });
   }

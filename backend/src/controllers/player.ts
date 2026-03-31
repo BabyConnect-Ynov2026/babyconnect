@@ -126,9 +126,7 @@ export async function getPlayerStats(req: Request, res: Response): Promise<void>
       where: {
         OR: [
           { redTeamId1: id },
-          { redTeamId2: id },
           { blueTeamId1: id },
-          { blueTeamId2: id },
         ],
       },
       orderBy: { createdAt: "desc" },
