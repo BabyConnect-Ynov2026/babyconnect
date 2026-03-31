@@ -172,6 +172,7 @@ npm run start
 | Repo | Description |
 |------|-------------|
 | [babyconnect](https://github.com/BabyConnect-Ynov2026/babyconnect) | Application principale (ce repo) |
+| [ynov-baby-vision](https://github.com/BabyConnect-Ynov2026/ynov-baby-vision) | Arbitrage IA — YOLOv8 + OpenCV, détection balle et buts |
 | [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION) | Documentation technique et utilisateur |
 | [COMPTES-RENDUS](https://github.com/BabyConnect-Ynov2026/COMPTES-RENDUS) | Comptes rendus individuels |
 | [INSTRUCTIONS](https://github.com/BabyConnect-Ynov2026/INSTRUCTIONS) | Instructions du challenge (fork) |
