@@ -6,7 +6,7 @@
 
 ## Ma contribution
 
-Dans un premier temps j'ai participé a la recherche de fonctionnalités et de materiel nécessaire pour le projet; et avec l'équipe infra j'ai participé a la mise en place de Raspberry et a sa configuration pour pouvoir y déployer l'application par la suite.
+Dans un premier temps j'ai participé a la recherche de fonctionnalités et de materiel nécessaire pour le projet; et avec l'équipe infra j'ai participé a la mise en place de Raspberry et a sa configuration pour pouvoir y déployer l'application par la suite. J'ai aussi mis un place un systeme de monitoring (Grafana + Prometheus + Exporter) pour avoir une vision de nos conteneurs et de notre raspberry
 
 ### Ce que j'ai fait
 
@@ -14,6 +14,7 @@ Dans un premier temps j'ai participé a la recherche de fonctionnalités et de m
 - Recherche du materiel necessaire 
 - Initialisation du Raspberry 
 - Configuration du Raspberry afin d'y déployer l'application par la suite 
+- Installation et Configuration de Grafana + Prometheus + Node Exporter + Cadvisor) pour avoir une vue sur la santé du Raspberry et des conteneurs. 
 ---
 
 ## Difficultés rencontrées
