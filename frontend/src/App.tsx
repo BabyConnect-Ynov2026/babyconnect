@@ -8,11 +8,14 @@ import Tournaments from './pages/admin/Tournaments'
 import Matches from './pages/admin/Matches'
 import Players from './pages/admin/Players'
 import Profile from './pages/Profile'
+import Auth from './pages/Auth'
+import { RequireAccount } from './features/auth/RequireAccount'
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/auth" element={<Auth />} />
 
       <Route path="/leaderboard" element={<Navigate to="/admin/leaderboard" replace />} />
       <Route path="/reservations" element={<Navigate to="/admin/reservations" replace />} />
@@ -31,7 +34,14 @@ export default function App() {
         <Route path="*" element={<Navigate to="dashboard" replace />} />
       </Route>
 
-      <Route path="/profile" element={<Profile />} />
+      <Route
+        path="/profile"
+        element={(
+          <RequireAccount>
+            <Profile />
+          </RequireAccount>
+        )}
+      />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
