@@ -1,9 +1,16 @@
-# Compte-rendu — [Guillaume MARDINLI] — [B3 INFRA]
+# Compte-rendu — [Guillaume MARDINLI] — [B3 INFRA] - [Equipe SaSuffit]
 
 **Challenge 48h Ynov Toulouse 2026 — Babyfoot du futur**
 
 ---
 
+## Le Projet
+
+On a décidé de partir sur une App Web qui permet la reservation de Babyfoot pour certains créneaux via un scan de badge NFC. 
+L'utilisateur se connecte sur l'application, il peut voir l'état des babyfoot (si des gens jouent dessus ou pas ) et si il trouve un babyfoot libre il peut scanner le badge NFC pour le reserver et dire qu'il joue dessus, il peut designer combien de joueurs jouent avec lui (et leur nom), comme ca si il reste un place quelqu'un peut venir jouer en plus. 
+Il y a aussi un systeme de classement, quand on gagne, on gagne de l'elo et quand on perd de l'élo; cet elo peut servir lors de tournoi organisés (par le bde par exemple ou autre) et il y a donc un systeme d eclassement. On a aussi mis en place un systeme de Camera et de Capteurs qui servetn a savoir si un but a été marqués ou non. (double verification on sait jamais si le capteur bug ou alors la camera). 
+
+ 
 ## Ma contribution
 
 Dans un premier temps j'ai participé a la recherche de fonctionnalités et de materiel nécessaire pour le projet; et avec l'équipe infra j'ai participé a la mise en place de Raspberry et a sa configuration pour pouvoir y déployer l'application par la suite. J'ai aussi mis un place un systeme de monitoring (Grafana + Prometheus + Exporter) pour avoir une vision de nos conteneurs et de notre raspberry
@@ -16,6 +23,11 @@ Dans un premier temps j'ai participé a la recherche de fonctionnalités et de m
 - Configuration du Raspberry afin d'y déployer l'application par la suite 
 - Installation et Configuration de Grafana + Prometheus + Node Exporter + Cadvisor) pour avoir une vue sur la santé du Raspberry et des conteneurs. 
 ---
+
+
+## Aide 
+
+- J'ai pas mal travaillé en groupe sur le Raspberry et sa configuration et aidé les devs sur la comprehenson de nos besoin en infra (surtout sur docker)
 
 ## Difficultés rencontrées
 
@@ -44,3 +56,20 @@ Donc je dirais que c'est vraiment l'aspect gestion de projet / gestion d'équipe
 
 **Cependant :**
 J'ai critiqué mais si on enleve mon point de vue sur le manque d'aspect technique dans le projet. Concernant la gestion de projet et d'équipe ca reste un très bon exercice a pratiquer. 
+
+
+## Annexe 
+
+**Preuves d'investissement**
+
+- Communication Discord :
+
+![Identifiants Reseau pour Raspberry](https://imgur.com/a/9ZFc9XY)
+
+![Carte SD Raspberry](https://imgur.com/a/5RAYua8)
+
+![IP Raspberry](https://imgur.com/a/meos1y5)
+
+![Avancée configration Raspberry](https://imgur.com/a/SnC0yzT)
+
+![Commit Git](https://imgur.com/a/CnKQXR0)
