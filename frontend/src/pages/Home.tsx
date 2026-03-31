@@ -23,7 +23,6 @@ export default function Home() {
     <main className="min-h-screen bg-[#f3f4ef] text-slate-950">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-36 sm:px-6 lg:px-8">
         <HomeHeader
-          currentUser={null}
           isMenuOpen={isMenuOpen}
           logoSrc={homeLogo}
           onCloseMenu={closeMenu}

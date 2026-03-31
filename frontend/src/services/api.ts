@@ -8,6 +8,8 @@ import type {
   Table,
   Tournament,
 } from '../types'
+import { getStoredAuthToken } from '../features/auth/storage'
+import type { AuthUser } from '../features/auth/types'
 
 const API_BASE_URL = '/api/v1'
 
@@ -72,10 +74,12 @@ const parseJson = async (response: Response) => {
 
 const request = async <T = unknown>(path: string, options: RequestOptions = {}): Promise<ApiResponse<T>> => {
   const { body, headers, method = 'GET', params } = options
+  const token = getStoredAuthToken()
   const response = await fetch(buildUrl(path, params), {
     method,
     headers: {
       ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -104,6 +108,15 @@ const api = {
 
 type MessageResponse = {
   message: string
+}
+
+type AuthResponse = {
+  player: AuthUser
+  token: string
+}
+
+type CurrentPlayerResponse = {
+  player: AuthUser
 }
 
 type PlayersResponse = {
@@ -176,11 +189,20 @@ type LeaderboardResponse = {
 
 // Players
 export const playersApi = {
-  register: (data: { username: string; email: string; password: string; full_name: string }) =>
+  register: (data: { username: string; email: string; password: string; fullName: string }) =>
     api.post<PlayerResponse>('/players/register', data),
   getAll: () => api.get<PlayersResponse>('/players'),
   getById: (id: number) => api.get<PlayerResponse>(`/players/${id}`),
   getStats: (id: number) => api.get<PlayerStatsResponse>(`/players/${id}/stats`),
+}
+
+// Auth
+export const authApi = {
+  login: (data: { email: string; password: string }) =>
+    api.post<AuthResponse>('/auth/login', data),
+  register: (data: { username: string; email: string; password: string; fullName: string }) =>
+    api.post<AuthResponse>('/auth/register', data),
+  getMe: () => api.get<CurrentPlayerResponse>('/auth/me'),
 }
 
 // Matches
