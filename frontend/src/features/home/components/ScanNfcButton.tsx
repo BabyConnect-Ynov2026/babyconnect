@@ -1,4 +1,4 @@
-import { ScanLine } from 'lucide-react'
+import { ScanLine } from "lucide-react";
 
 export function ScanNfcButton() {
   return (
@@ -14,9 +14,9 @@ export function ScanNfcButton() {
           <span className="block text-[0.7rem] font-black uppercase tracking-[0.24em]">
             Scanner
           </span>
-          <span className="block text-base font-black">NFC</span>
+          <span className="block text-base font-black">QR CODE</span>
         </span>
       </button>
     </div>
-  )
+  );
 }

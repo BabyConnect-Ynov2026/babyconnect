@@ -5,10 +5,10 @@ export function HomeHero() {
         BabyConnect
       </p>
       <h1 className="mt-3 text-[2.1rem] font-black leading-none tracking-tight text-slate-950 sm:text-5xl">
-        Mes baby-foots connus
+        Tables de babyfoot du campus
       </h1>
       <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
-        Retrouve les tables du campus, leur occupation en direct et le tournoi en cours.
+        Retrouve les tables du campus referencees dans BabyConnect.
       </p>
     </section>
   )

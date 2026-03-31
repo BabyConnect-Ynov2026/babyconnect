@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as player from "../controllers/player";
 import * as match from "../controllers/match";
 import * as reservation from "../controllers/reservation";
+import * as table from "../controllers/table";
 import * as tournament from "../controllers/tournament";
 import * as leaderboard from "../controllers/leaderboard";
 
@@ -34,7 +35,9 @@ router.get("/reservations", reservation.getReservations);
 router.delete("/reservations/:id", reservation.cancelReservation);
 
 // Tables
-router.get("/tables", reservation.getTables);
+router.get("/tables", table.getTables);
+router.get("/tables/live", table.getLiveTables);
+router.get("/tables/live/stream", table.streamLiveTables);
 
 // Tournaments
 router.post("/tournaments", tournament.createTournament);
