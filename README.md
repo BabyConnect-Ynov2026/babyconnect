@@ -1,90 +1,157 @@
-# babyconnect-ai
+# BabyConnect
 
-Service Python de vision pour babyfoot avec :
-- ingestion video via `ffmpeg`
-- detection de balle et de buts
-- diffusion d'evenements en WebSocket
-- API HTTP Flask pour piloter le service
+Plateforme de gestion de babyfoot avec :
+- un frontend React + TypeScript
+- un backend Express + TypeScript
+- une base PostgreSQL
+- une orchestration Docker Compose
 
-## Structure
+Le projet permet de gerer les joueurs, les matchs, les reservations, les tables, les tournois et le classement.
+
+## Architecture
 
 ```text
-babyconnect-ai/
-|- vision/
-|  |- api.py
-|  |- calibrate.py
-|  |- camera.py
-|  |- config.py
-|  |- detector.py
-|  |- events.py
-|  `- goal_detection.py
-|- api.py
-|- detector.py
-|- main.py
-`- requirements.txt
+babyconnect/
+|- frontend/         Application React + Vite
+|- backend/          API Express + Prisma
+|- DOCUMENTATION/    Documentation technique et guides
+|- COMPTES-RENDUS/   Comptes-rendus de projet
+|- docker-compose.yml
+|- .env.example
+`- README.md
 ```
 
-## Installation
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+
+Pages principales :
+- accueil
+- authentification
+- profil
+- dashboard admin
+- leaderboard
+- reservations
+- tournois
+- matchs
+- joueurs
+
+### Backend
+- Express
+- TypeScript
+- Prisma
+- PostgreSQL
+- JWT pour l'authentification
+
+Le backend expose ses routes sous ` /api/v1 `.
+
+Domaines couverts :
+- auth
+- players
+- matches
+- reservations
+- tables
+- tournaments
+- leaderboard
+
+## Prerequis
+
+- Node.js 20+ recommande
+- npm
+- Docker et Docker Compose pour le lancement conteneurise
+- PostgreSQL si lancement local sans Docker
+
+## Demarrage rapide avec Docker
+
+1. Copier le fichier d'environnement :
 
 ```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-ffmpeg -version
+Copy-Item .env.example .env
 ```
 
-## Demarrage
+2. Demarrer la stack :
 
 ```powershell
-# API HTTP
-python api.py
-
-# Detecteur
-python main.py
-
-# Detecteur sans fenetre OpenCV
-python main.py --no-window
-
-# Calibration
-python main.py --calibrate
+docker compose up --build
 ```
+
+3. Acceder aux services :
+- frontend : `http://localhost`
+- backend : `http://localhost:8080/api/v1/health`
+- PostgreSQL : `localhost:5432`
+
+## Demarrage local
+
+### Backend
+
+```powershell
+cd backend
+npm install
+npm run prisma:generate
+npm run dev
+```
+
+Le backend demarre par defaut sur `http://localhost:8080`.
+
+### Frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Le frontend Vite demarre generalement sur `http://localhost:5173`.
 
 ## Variables d'environnement
 
-- `VISION_SOURCE` : URL DroidCam ou chemin vers une video locale
-- `VISION_API_HOST` / `VISION_API_PORT` : bind HTTP
-- `VISION_WS_HOST` / `VISION_WS_PORT` : bind WebSocket
-- `VISION_SHOW_WINDOW=1` : active la fenetre OpenCV
-- `VISION_AUTO_START=1` : demarre la detection au boot de l'API
+Le fichier [`.env.example`](./.env.example) contient les variables principales :
 
-## API HTTP
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
+- `DATABASE_URL`
+- `SERVER_PORT`
+- `JWT_SECRET`
 
+## API principale
+
+Base URL : `http://localhost:8080/api/v1`
+
+Exemples de routes :
 - `GET /health`
-- `GET /status`
-- `GET /events/recent`
-- `POST /start`
-- `POST /stop`
-- `POST /match/start`
-- `POST /match/end`
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
+- `GET /players`
+- `GET /matches`
+- `POST /reservations`
+- `GET /tables`
+- `GET /tables/live`
+- `GET /leaderboard`
+- `GET /stats`
 
-Exemple de demarrage avec une video locale :
+## Documentation du projet
+
+Documentation complementaire disponible dans :
+- [`DOCUMENTATION/architecture.md`](./DOCUMENTATION/architecture.md)
+- [`DOCUMENTATION/api.md`](./DOCUMENTATION/api.md)
+- [`DOCUMENTATION/installation.md`](./DOCUMENTATION/installation.md)
+- [`DOCUMENTATION/guide-utilisateur.md`](./DOCUMENTATION/guide-utilisateur.md)
+- [`COMPTES-RENDUS/README.md`](./COMPTES-RENDUS/README.md)
+
+## Workflow recommande pour contribuer
 
 ```powershell
-$env:VISION_SOURCE = ".\test_640.mp4"
-python api.py
-Invoke-RestMethod -Method Post http://127.0.0.1:5000/start
+git checkout -b docs/readme-cleanup
+git add README.md
+git commit -m "docs: update repository README"
+git push -u origin docs/readme-cleanup
 ```
 
-## Evenements WebSocket
-
-Le serveur publie des messages JSON sur `ws://<host>:<port>` avec les types :
-- `match.start`
-- `match.end`
-- `goal`
-- `score.update`
-- `shot`
-- `ball.detected`
-- `ball.lost`
-- `detector.started`
-- `detector.stopped`
-- `detector.error`
+Ensuite, ouvrir une Pull Request vers la branche cible du projet.
