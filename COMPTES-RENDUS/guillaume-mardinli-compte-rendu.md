@@ -64,12 +64,12 @@ J'ai critiqué mais si on enleve mon point de vue sur le manque d'aspect techniq
 
 - Communication Discord :
 
-![Identifiants Reseau pour Raspberry](https://imgur.com/a/9ZFc9XY)
+![Identifiants Reseau pour Raspberry](https://i.imgur.com/Tsa3jJh.png)
 
-![Carte SD Raspberry](https://imgur.com/a/5RAYua8)
+![Carte SD Raspberry](https://i.imgur.com/203CQoS.png)
 
-![IP Raspberry](https://imgur.com/a/meos1y5)
+![IP Raspberry](https://i.imgur.com/cQj1Pk3.png)
 
-![Avancée configration Raspberry](https://imgur.com/a/SnC0yzT)
+![Avancée configration Raspberry](https://i.imgur.com/nVbamq3.png)
 
-![Commit Git](https://imgur.com/a/CnKQXR0)
+![Commit Git](https://i.imgur.com/G40H7rX.png)
