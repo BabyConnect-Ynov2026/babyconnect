@@ -1,5 +1,6 @@
 import type {
   GlobalStats,
+  LiveTable,
   LeaderboardEntry,
   Match,
   Player,
@@ -143,6 +144,11 @@ type TablesResponse = {
   tables: Table[]
 }
 
+type LiveTablesResponse = {
+  count: number
+  tables: LiveTable[]
+}
+
 type TournamentsResponse = {
   count: number
   tournaments: Tournament[]
@@ -182,9 +188,7 @@ export const matchesApi = {
   create: (data: {
     table_id: number
     red_team_id_1: number
-    red_team_id_2?: number
     blue_team_id_1: number
-    blue_team_id_2?: number
   }) => api.post<MatchResponse>('/matches', data),
   getAll: () => api.get<MatchesResponse>('/matches'),
   getById: (id: number) => api.get<MatchResponse>(`/matches/${id}`),
@@ -210,6 +214,7 @@ export const reservationsApi = {
 // Tables
 export const tablesApi = {
   getAll: () => api.get<TablesResponse>('/tables'),
+  getLive: () => api.get<LiveTablesResponse>('/tables/live'),
 }
 
 // Tournaments

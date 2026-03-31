@@ -17,9 +17,7 @@ export const loginSchema = z.object({
 export const createMatchSchema = z.object({
   tableId: z.number().int().positive(),
   redTeamId1: z.number().int().positive(),
-  redTeamId2: z.number().int().positive().optional(),
   blueTeamId1: z.number().int().positive(),
-  blueTeamId2: z.number().int().positive().optional(),
   tournamentId: z.number().int().positive().optional(),
 });
 
