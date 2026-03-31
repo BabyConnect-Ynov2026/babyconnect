@@ -1,14 +1,26 @@
-FROM golang:1.22-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+COPY package*.json ./
+RUN npm ci
 
-COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o babyconnect .
+COPY prisma ./prisma
+RUN npx prisma generate
 
-FROM alpine:3.19
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
+
+FROM node:20-alpine
 WORKDIR /app
-COPY --from=builder /app/babyconnect .
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY prisma.config.ts ./
+COPY prisma ./prisma
+
 EXPOSE 8080
-CMD ["./babyconnect"]
+CMD ["/bin/sh", "-c", "npx prisma db push --accept-data-loss && node dist/index.js"]

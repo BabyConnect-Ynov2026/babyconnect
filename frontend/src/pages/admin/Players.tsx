@@ -14,7 +14,7 @@ export default function Players() {
     username: '',
     email: '',
     password: '',
-    full_name: '',
+    fullName: '',
   })
 
   const load = () => {
@@ -31,7 +31,7 @@ export default function Players() {
       await playersApi.register(form)
       toast.success(`${form.username} enregistré !`)
       setShowForm(false)
-      setForm({ username: '', email: '', password: '', full_name: '' })
+      setForm({ username: '', email: '', password: '', fullName: '' })
       load()
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
@@ -71,8 +71,8 @@ export default function Players() {
             <div>
               <label className="block text-sm text-gray-400 mb-1">Nom complet</label>
               <input type="text" className="input" placeholder="Nicolas Gouy"
-                value={form.full_name}
-                onChange={(e) => setForm({ ...form, full_name: e.target.value })}
+                value={form.fullName}
+                onChange={(e) => setForm({ ...form, fullName: e.target.value })}
                 required />
             </div>
             <div>

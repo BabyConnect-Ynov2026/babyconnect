@@ -7,9 +7,9 @@
 **Challenge 48h · Babyfoot du futur**
 
 [![CI](https://github.com/BabyConnect-Ynov2026/babyconnect/actions/workflows/ci.yml/badge.svg)](https://github.com/BabyConnect-Ynov2026/babyconnect/actions)
-![Go](https://img.shields.io/badge/Go-1.21-00ADD8?logo=go)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
-![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker)
+![Prisma](https://img.shields.io/badge/Prisma-7-2D3748?logo=prisma)
 
 </div>
 
@@ -66,8 +66,8 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 │                                                         │
 │   ┌──────────────┐     ┌──────────────┐    ┌──────────┐ │
 │   │   Frontend   │───▶│   Backend    │───▶│ Postgres │ │
-│   │  React + TS  │     │   Go + Gin   │    │    DB    │ │
-│   │  Tailwind    │◀───│  REST API    │◀───│          │ │
+│   │  React + TS  │     │ Express + TS │    │    DB    │ │
+│   │  Tailwind    │◀───│ Prisma + REST │◀───│          │ │
 │   └──────────────┘     └──────────────┘    └──────────┘ │
 │         :3000               :8080             :5432     │
 └─────────────────────────────────────────────────────────┘
@@ -78,7 +78,7 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 | Layer | Technologies |
 |-------|-------------|
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| Backend | Go 1.21, Gin, GORM |
+| Backend | TypeScript, Express, Prisma |
 | Base de données | PostgreSQL 16 |
 | Déploiement | Docker, Docker Compose |
 | CI/CD | GitHub Actions |
@@ -86,41 +86,68 @@ Et si on réinventait l'expérience babyfoot à Ynov ? BabyConnect est une plate
 ## Lancer le projet
 
 ### Prérequis
-- [Docker](https://www.docker.com/) + Docker Compose
-- [Go 1.21+](https://go.dev/) (pour le dev local)
-- [Node.js 20+](https://nodejs.org/) (pour le dev local)
+- [Node.js 20+](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
+- [Docker](https://www.docker.com/) + Docker Compose (optionnel, pratique pour Postgres)
 
-### Démarrage rapide (Docker)
+### Etat actuel du démarrage
+
+Le backend du repo n'est plus en Go: il est maintenant en **TypeScript / Express / Prisma** dans [backend/](./backend).
+
+Important:
+- le fichier [`.env.example`](./.env.example) à la racine sert surtout au `docker compose`
+- pour lancer l'API en local, il faut utiliser [`backend/.env.example`](./backend/.env.example)
+- le `docker compose up -d` complet n'est **pas** la bonne méthode pour démarrer le backend dans l'etat actuel du repo
+
+### Base de donnees (Docker recommande)
 
 ```bash
-# 1. Cloner le repo
 git clone https://github.com/BabyConnect-Ynov2026/babyconnect.git
 cd babyconnect
 
-# 2. Configurer l'environnement
+# Configuration Docker (si besoin)
 cp .env.example .env
 
-# 3. Lancer tous les services
-docker compose up -d
-
-# L'app est disponible sur http://localhost
-# L'API est sur http://localhost:8080/api/v1
+# Demarrer uniquement Postgres
+docker compose up -d db
 ```
 
-### Développement local
+### Backend local
 
 ```bash
-# Backend
 cd backend
-go mod download
-cp ../.env.example .env
-go run main.go
 
-# Frontend (dans un autre terminal)
+# 1. Configurer l'environnement du backend
+cp .env.example .env
+
+# 2. Installer les dependances
+npm install
+
+# 3. Generer / synchroniser Prisma avec la base
+npm run prisma:push
+
+# 4. Lancer l'API
+npm run dev
+
+# API: http://localhost:8080/api/v1
+```
+
+### Frontend local
+
+```bash
 cd frontend
 npm install
 npm run dev
-# → http://localhost:3000
+# Frontend: http://localhost:3000
+```
+
+### Build backend
+
+```bash
+cd backend
+npm install
+npm run build
+npm run start
 ```
 
 ## API Endpoints
@@ -145,6 +172,7 @@ npm run dev
 | Repo | Description |
 |------|-------------|
 | [babyconnect](https://github.com/BabyConnect-Ynov2026/babyconnect) | Application principale (ce repo) |
+| [ynov-baby-vision](https://github.com/BabyConnect-Ynov2026/ynov-baby-vision) | Arbitrage IA — YOLOv8 + OpenCV, détection balle et buts |
 | [DOCUMENTATION](https://github.com/BabyConnect-Ynov2026/DOCUMENTATION) | Documentation technique et utilisateur |
 | [COMPTES-RENDUS](https://github.com/BabyConnect-Ynov2026/COMPTES-RENDUS) | Comptes rendus individuels |
 | [INSTRUCTIONS](https://github.com/BabyConnect-Ynov2026/INSTRUCTIONS) | Instructions du challenge (fork) |

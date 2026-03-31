@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  email     String  @unique
+  password  String
+  fullName  String
+
+  eloRating Int      @default(1000)
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
+  goals     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservations           Reservation[]
+  tournamentParticipants TournamentParticipant[]
+  wonTournaments         Tournament[]            @relation("TournamentWinner")
+
+  redMatches  Match[] @relation("RedPlayer")
+  blueMatches Match[] @relation("BluePlayer")
+}
+
+model Table {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  location  String?
+  available Boolean @default(true)
+
+  matches      Match[]
+  reservations Reservation[]
+}
+
+enum MatchStatus {
+  pending
+  ongoing
+  completed
+}
+
+model Match {
+  id      Int   @id @default(autoincrement())
+  tableId Int
+  table   Table @relation(fields: [tableId], references: [id])
+
+  redTeamId1 Int
+  redPlayer1 Player  @relation("RedPlayer", fields: [redTeamId1], references: [id])
+  redScore   Int     @default(0)
+
+  blueTeamId1 Int
+  bluePlayer1 Player  @relation("BluePlayer", fields: [blueTeamId1], references: [id])
+  blueScore   Int     @default(0)
+
+  tournamentId Int?
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id])
+
+  status          MatchStatus @default(pending)
+  durationSeconds Int         @default(0)
+  startedAt       DateTime?
+  finishedAt      DateTime?
+  createdAt       DateTime    @default(now())
+}
+
+enum ReservationStatus {
+  pending
+  confirmed
+  cancelled
+  completed
+}
+
+model Reservation {
+  id       Int    @id @default(autoincrement())
+  playerId Int
+  player   Player @relation(fields: [playerId], references: [id])
+  tableId  Int
+  table    Table  @relation(fields: [tableId], references: [id])
+
+  startTime DateTime
+  endTime   DateTime
+  status    ReservationStatus @default(pending)
+  notes     String            @default("")
+
+  createdAt DateTime @default(now())
+}
+
+enum TournamentStatus {
+  open
+  in_progress
+  finished
+}
+
+model Tournament {
+  id          Int              @id @default(autoincrement())
+  name        String
+  description String           @default("")
+  maxPlayers  Int              @default(16)
+  status      TournamentStatus @default(open)
+  startDate   DateTime?
+  endDate     DateTime?
+
+  winnerId Int?
+  winner   Player? @relation("TournamentWinner", fields: [winnerId], references: [id])
+
+  matches      Match[]
+  participants TournamentParticipant[]
+  createdAt    DateTime                @default(now())
+}
+
+model TournamentParticipant {
+  tournamentId Int
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  playerId     Int
+  player       Player     @relation(fields: [playerId], references: [id])
+
+  joinedAt DateTime @default(now())
+
+  @@id([tournamentId, playerId])
+}
