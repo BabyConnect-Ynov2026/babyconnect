@@ -17,12 +17,11 @@ model Player {
   email     String  @unique
   password  String
   fullName  String
-  avatarUrl String?
 
   eloRating Int      @default(1000)
-  wins      Int      @default(0) // to del
-  losses    Int      @default(0) // to del
-  draws     Int      @default(0) // to del
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
   goals     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,10 +30,8 @@ model Player {
   tournamentParticipants TournamentParticipant[]
   wonTournaments         Tournament[]            @relation("TournamentWinner")
 
-  redMatches1  Match[] @relation("RedPlayer1")
-  redMatches2  Match[] @relation("RedPlayer2")
-  blueMatches1 Match[] @relation("BluePlayer1")
-  blueMatches2 Match[] @relation("BluePlayer2")
+  redMatches  Match[] @relation("RedPlayer")
+  blueMatches Match[] @relation("BluePlayer")
 }
 
 model Table {
@@ -59,15 +56,11 @@ model Match {
   table   Table @relation(fields: [tableId], references: [id])
 
   redTeamId1 Int
-  redPlayer1 Player  @relation("RedPlayer1", fields: [redTeamId1], references: [id])
-  redTeamId2 Int?
-  redPlayer2 Player? @relation("RedPlayer2", fields: [redTeamId2], references: [id])
+  redPlayer1 Player  @relation("RedPlayer", fields: [redTeamId1], references: [id])
   redScore   Int     @default(0)
 
   blueTeamId1 Int
-  bluePlayer1 Player  @relation("BluePlayer1", fields: [blueTeamId1], references: [id])
-  blueTeamId2 Int?
-  bluePlayer2 Player? @relation("BluePlayer2", fields: [blueTeamId2], references: [id])
+  bluePlayer1 Player  @relation("BluePlayer", fields: [blueTeamId1], references: [id])
   blueScore   Int     @default(0)
 
   tournamentId Int?
@@ -126,7 +119,6 @@ model Tournament {
 }
 
 model TournamentParticipant {
-  id           Int        @id @default(autoincrement())
   tournamentId Int
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
   playerId     Int
@@ -134,5 +126,5 @@ model TournamentParticipant {
 
   joinedAt DateTime @default(now())
 
-  @@unique([tournamentId, playerId])
+  @@id([tournamentId, playerId])
 }
