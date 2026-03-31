@@ -119,7 +119,6 @@ model Tournament {
 }
 
 model TournamentParticipant {
-  id           Int        @id @default(autoincrement())
   tournamentId Int
   tournament   Tournament @relation(fields: [tournamentId], references: [id])
   playerId     Int
@@ -127,5 +126,5 @@ model TournamentParticipant {
 
   joinedAt DateTime @default(now())
 
-  @@unique([tournamentId, playerId])
+  @@id([tournamentId, playerId])
 }

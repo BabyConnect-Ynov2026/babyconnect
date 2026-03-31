@@ -1,160 +1,102 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
 import homeLogo from '../../assets/img/logo-home-ynov.png'
+import { ReservationModal } from '../components/ReservationModal'
+import { BabyfootCard } from '../features/home/components/BabyfootCard'
 import { HomeHeader } from '../features/home/components/HomeHeader'
 import { HomeHero } from '../features/home/components/HomeHero'
 import { ScanNfcButton } from '../features/home/components/ScanNfcButton'
+import { useAuth } from '../features/auth/useAuth'
 import { useHomeState } from '../features/home/useHomeState'
-import { ReservationModal } from '../components/ReservationModal'
-import { tablesApi } from '../services/api'
-import { Table } from '../types'
-import { MapPin, Clock, Users } from 'lucide-react'
+import { reservationsApi } from '../services/api'
+import type { Table } from '../types'
+import type { BabyfootCardData } from '../features/home/types'
 
-// ─── Données enrichies par table (indexées par position dans la liste) ────────
-// Remplace ces données par celles de ton API quand elles seront disponibles
-const MOCK_DATA = [
-  {
-    name: 'Baby-foot Souk',
-    location: 'Souk',
-    occupancy: '2/4',
-    status: 'occupied' as const,
-    timeRemainingSeconds: 514,
-    players: ['Corentin R. (Silver Rank)', 'Lucas M.'],
-  },
-  {
-    name: 'Baby-foot Hall Principal',
-    location: 'Campus',
-    occupancy: '0/4',
-    status: 'free' as const,
-  },
-  {
-    name: 'Baby-foot Salle 104',
-    location: 'Salle 104',
-    occupancy: '4/4',
-    status: 'occupied' as const,
-    timeRemainingSeconds: 302,
-    players: ['Théo B.', 'Mathis D.', 'Enzo P.', 'Nathan G.'],
-  },
-]
+const SLOT_DURATION_MINUTES = 15
 
-// ─── Hook compteur décroissant ────────────────────────────────────────────────
-function useCountdown(initialSeconds?: number) {
-  const [secs, setSecs] = useState<number>(initialSeconds ?? 0)
-
-  useEffect(() => {
-    if (!initialSeconds) return
-    setSecs(initialSeconds)
-    const id = setInterval(() => setSecs((s) => (s > 0 ? s - 1 : 0)), 1000)
-    return () => clearInterval(id)
-  }, [initialSeconds])
-
-  if (!initialSeconds) return null
-  const m = Math.floor(secs / 60).toString().padStart(2, '0')
-  const s = (secs % 60).toString().padStart(2, '0')
-  return `${m}:${s}`
+function toReservationTable(card: BabyfootCardData): Table {
+  return {
+    available: card.status === 'free',
+    id: card.id,
+    location: card.location,
+    name: card.name,
+  }
 }
 
-// ─── Carte individuelle ───────────────────────────────────────────────────────
-type MockEntry = (typeof MOCK_DATA)[number]
+function getNextReservationSlot(): { start: Date; end: Date } {
+  const now = new Date()
+  const start = new Date(now)
+  start.setSeconds(0, 0)
 
-function TableCard({
-  table,
-  mock,
-  onReserve,
-}: {
-  table: Table
-  mock: MockEntry
-  onReserve: () => void
-}) {
-  const countdown = useCountdown(
-    mock.status === 'occupied' ? mock.timeRemainingSeconds : undefined
-  )
-  const isFree = mock.status === 'free'
+  const minutes = start.getMinutes()
+  const nextQuarter = Math.ceil((minutes + 1) / SLOT_DURATION_MINUTES) * SLOT_DURATION_MINUTES
+  start.setMinutes(nextQuarter)
 
-  return (
-    <div
-      className={`flex flex-col gap-3 p-5 rounded-2xl shadow-sm border border-black/5 ${
-        isFree ? 'bg-gradient-to-br from-emerald-50 via-white to-white' : 'bg-white'
-      }`}
-    >
-      {/* Nom + occupancy */}
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-xl font-black text-slate-900 leading-tight">{mock.name}</h3>
-        <span className="text-sm font-black text-slate-500 whitespace-nowrap pt-0.5">
-          {mock.occupancy}
-        </span>
-      </div>
-
-      {/* Localisation */}
-      <div className="flex items-center gap-1.5 text-sm text-slate-500 font-medium">
-        <MapPin size={13} className="text-emerald-500" />
-        {mock.location}
-      </div>
-
-      {/* Badge statut + label */}
-      <div className="flex items-center gap-3">
-        {isFree ? (
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full">
-            Disponible
-          </span>
-        ) : (
-          <span className="text-xs font-black uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
-            Occupé
-          </span>
-        )}
-        <span className="text-sm text-slate-400 font-medium">
-          {isFree ? 'Prêt pour la prochaine partie' : 'Partie en cours'}
-        </span>
-      </div>
-
-      {/* Détails si occupé */}
-      {mock.status === 'occupied' && (
-        <div className="flex flex-col gap-1.5 mt-1">
-          {countdown !== null && (
-            <div className="flex items-center gap-1.5 text-sm text-slate-500">
-              <Clock size={13} className="text-slate-400" />
-              Reste {countdown}
-            </div>
-          )}
-          {'players' in mock && mock.players && mock.players.length > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-slate-500">
-              <Users size={13} className="text-slate-400" />
-              {mock.players.join(' · ')}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Spacer pour aligner le bouton en bas */}
-      <div className="flex-grow" />
-
-      {/* CTA */}
-      <button
-        onClick={onReserve}
-        className="mt-2 w-full bg-emerald-500 text-white py-3 px-6 rounded-2xl text-sm font-black hover:bg-emerald-600 transition-all"
-      >
-        Réserver cette table
-      </button>
-    </div>
-  )
+  const end = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60 * 1000)
+  return { end, start }
 }
 
-// ─── Page principale ──────────────────────────────────────────────────────────
 export default function Home() {
-  const { closeMenu, isMenuOpen, toggleMenu } = useHomeState()
-  const [tables, setTables] = useState<Table[]>([])
   const [reservingTable, setReservingTable] = useState<Table | null>(null)
+  const [isAutoReserving, setIsAutoReserving] = useState(false)
+  const { user } = useAuth()
+  const {
+    cards,
+    cardsError,
+    closeMenu,
+    isLoadingCards,
+    isMenuOpen,
+    toggleMenu,
+  } = useHomeState()
 
-  useEffect(() => {
-    tablesApi.getAll().then((res) => {
-      setTables(res.data.tables ?? [])
-    })
-  }, [])
+  const openReservationModal = (card: BabyfootCardData) => {
+    setReservingTable(toReservationTable(card))
+  }
+
+  const handleScannedTable = async (tableId: number) => {
+    const scannedCard = cards.find((card) => card.id === tableId)
+    if (!scannedCard) {
+      toast.error('Table non trouvee. Verifie la carte NFC.')
+      return
+    }
+
+    if (scannedCard.status !== 'free') {
+      toast('Cette table est deja reservee ou occupee. Choisis un creneau.')
+      openReservationModal(scannedCard)
+      return
+    }
+
+    if (!user) {
+      toast('Connecte-toi pour reserver automatiquement.')
+      openReservationModal(scannedCard)
+      return
+    }
+
+    setIsAutoReserving(true)
+    const { end, start } = getNextReservationSlot()
+
+    try {
+      await reservationsApi.create({
+        end_time: end.toISOString(),
+        notes: 'Reservation automatique via carte NFC',
+        player_id: user.id,
+        start_time: start.toISOString(),
+        table_id: scannedCard.id,
+      })
+      toast.success(`Table ${scannedCard.name} reservee automatiquement.`)
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
+      toast.error(msg ?? 'Reservation auto impossible. Choisis un creneau.')
+      openReservationModal(scannedCard)
+    } finally {
+      setIsAutoReserving(false)
+    }
+  }
 
   return (
     <main className="min-h-screen bg-[#f3f4ef] text-slate-950">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-36 sm:px-6 lg:px-8">
         <HomeHeader
-          currentUser={null}
           isMenuOpen={isMenuOpen}
           logoSrc={homeLogo}
           onCloseMenu={closeMenu}
@@ -163,23 +105,51 @@ export default function Home() {
 
         <HomeHero />
 
-        <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tables.length === 0 ? (
-            <p className="text-sm text-slate-400 col-span-3">Chargement des tables...</p>
-          ) : (
-            tables.map((table, index) => (
-              <TableCard
-                key={table.id}
-                table={table}
-                mock={MOCK_DATA[index % MOCK_DATA.length]}
-                onReserve={() => setReservingTable(table)}
-              />
-            ))
-          )}
-        </section>
+        {cardsError && (
+          <div className="mt-6 rounded-3xl border border-red-100 bg-red-50/90 px-5 py-4 text-sm font-semibold text-red-700 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
+            {cardsError}
+          </div>
+        )}
+
+        {isLoadingCards && (
+          <div className="mt-6 rounded-3xl border border-black/5 bg-white/80 px-5 py-6 text-sm font-semibold text-slate-600 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
+            Chargement des tables...
+          </div>
+        )}
+
+        {!isLoadingCards && cards.length > 0 && (
+          <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {cards.map((card) => (
+              <div key={card.id} className="flex h-full flex-col gap-3">
+                <BabyfootCard card={card} />
+                <button
+                  type="button"
+                  onClick={() => openReservationModal(card)}
+                  className="w-full rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-black text-white transition-all hover:bg-emerald-600"
+                >
+                  Réserver cette table
+                </button>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {!isLoadingCards && cards.length === 0 && !cardsError && (
+          <div className="mt-6 rounded-3xl border border-black/5 bg-white/80 px-5 py-6 text-sm font-semibold text-slate-600 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
+            Aucune table n&apos;a été trouvée dans la base.
+          </div>
+        )}
       </div>
 
-      <ScanNfcButton />
+      <ScanNfcButton onTableScanned={handleScannedTable} />
+
+      {isAutoReserving && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/25 backdrop-blur-[1px]">
+          <div className="rounded-2xl bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-[0_22px_50px_rgba(15,23,42,0.2)]">
+            Reservation NFC en cours...
+          </div>
+        </div>
+      )}
 
       {reservingTable && (
         <ReservationModal

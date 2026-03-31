@@ -5,6 +5,7 @@ import * as reservation from "../controllers/reservation";
 import * as table from "../controllers/table";
 import * as tournament from "../controllers/tournament";
 import * as leaderboard from "../controllers/leaderboard";
+import { authenticateToken } from "../middlewares/auth";
 
 const router = Router();
 
@@ -14,7 +15,9 @@ router.get("/health", (_req, res) => {
 });
 
 // Auth
+router.post("/auth/register", player.registerAndLogin);
 router.post("/auth/login", player.login);
+router.get("/auth/me", authenticateToken, player.getCurrentPlayer);
 
 // Players
 router.post("/players/register", player.register);
