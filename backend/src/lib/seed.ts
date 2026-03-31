@@ -1,16 +1,18 @@
 import prisma from "./prisma";
 
-export async function seedTables(): Promise<void> {
-  const count = await prisma.table.count();
-  if (count > 0) return;
+const defaultTables = [
+  { name: "Table 1", location: "Souk - Rez-de-chaussée", available: true },
+  { name: "Table 2", location: "Souk - Rez-de-chaussée", available: true },
+  { name: "Table 3", location: "Souk - 1er étage", available: true },
+];
 
-  await prisma.table.createMany({
-    data: [
-      { name: "Table 1", location: "Souk - Rez-de-chaussée", available: true },
-      { name: "Table 2", location: "Souk - Rez-de-chaussée", available: true },
-      { name: "Table 3", location: "Souk - 1er étage", available: true },
-    ],
+export async function seedTables(): Promise<void> {
+  const result = await prisma.table.createMany({
+    data: defaultTables,
+    skipDuplicates: true,
   });
 
-  console.log("Seeded default tables");
+  if (result.count > 0) {
+    console.log(`Seeded ${result.count} default tables`);
+  }
 }

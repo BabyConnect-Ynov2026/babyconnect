@@ -3,18 +3,24 @@
 ## Prérequis
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (inclut Docker Compose)
+- [Node.js 20+](https://nodejs.org/)
+- npm
 - Git
 
-## Installation en 3 commandes
+## Lancement recommande
 
 ```bash
 git clone https://github.com/BabyConnect-Ynov2026/babyconnect.git
 cd babyconnect
 cp .env.example .env
-docker compose up -d
+docker compose up -d db
 ```
 
-L'application est disponible sur **http://localhost**.
+Cette commande demarre uniquement PostgreSQL.
+
+Pour lancer l'application complete:
+- backend API: `http://localhost:8080/api/v1`
+- frontend: `http://localhost:3000`
 
 ---
 
@@ -39,14 +45,18 @@ L'application est disponible sur **http://localhost**.
 ```bash
 cd backend
 
-# Installer les dépendances Go
-go mod download
+# Installer les dépendances Node
+npm install
 
-# Copier la config (modifier DB_HOST=localhost)
-cp ../.env.example .env
+# Copier la config backend (modifier DB_HOST=localhost si besoin)
+cp .env.example .env
+
+# Synchroniser le schema Prisma avec la base
+npm run prisma:push
 
 # Lancer l'API
-go run main.go
+npm run dev
+# → http://localhost:8080/api/v1
 ```
 
 ### Frontend
