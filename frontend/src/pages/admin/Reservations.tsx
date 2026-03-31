@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Calendar, Plus, X, Clock, MapPin } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { reservationsApi, tablesApi, playersApi } from '../../services/api'
 import { Reservation, Table, Player } from '../../types'
 import { format } from 'date-fns'
@@ -7,11 +8,14 @@ import { fr } from 'date-fns/locale'
 import toast from 'react-hot-toast'
 
 export default function Reservations() {
+  const navigate = useNavigate()
+
   const [reservations, setReservations] = useState<Reservation[]>([])
   const [tables, setTables] = useState<Table[]>([])
   const [players, setPlayers] = useState<Player[]>([])
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(true)
+
   const [form, setForm] = useState({
     player_id: '',
     table_id: '',
@@ -25,11 +29,13 @@ export default function Reservations() {
       reservationsApi.getAll(),
       tablesApi.getAll(),
       playersApi.getAll(),
-    ]).then(([resRes, tablesRes, playersRes]) => {
-      setReservations(resRes.data.reservations ?? [])
-      setTables(tablesRes.data.tables ?? [])
-      setPlayers(playersRes.data.players ?? [])
-    }).finally(() => setLoading(false))
+    ])
+      .then(([resRes, tablesRes, playersRes]) => {
+        setReservations(resRes.data.reservations ?? [])
+        setTables(tablesRes.data.tables ?? [])
+        setPlayers(playersRes.data.players ?? [])
+      })
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => { load() }, [])
@@ -44,9 +50,16 @@ export default function Reservations() {
         end_time: new Date(form.end_time).toISOString(),
         notes: form.notes,
       })
+
       toast.success('Réservation créée !')
       setShowForm(false)
-      setForm({ player_id: '', table_id: '', start_time: '', end_time: '', notes: '' })
+      setForm({
+        player_id: '',
+        table_id: '',
+        start_time: '',
+        end_time: '',
+        notes: '',
+      })
       load()
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
@@ -71,12 +84,14 @@ export default function Reservations() {
       completed: 'badge-blue',
       pending: 'badge-yellow',
     }
+
     const labels: Record<string, string> = {
       confirmed: 'Confirmé',
       cancelled: 'Annulé',
       completed: 'Terminé',
       pending: 'En attente',
     }
+
     return <span className={map[status] ?? 'badge-yellow'}>{labels[status] ?? status}</span>
   }
 
@@ -90,7 +105,10 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      {/* HEADER FIX */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+        {/* TITRE */}
         <div className="flex items-center gap-3">
           <Calendar className="text-green-400" size={28} />
           <div>
@@ -98,13 +116,20 @@ export default function Reservations() {
             <p className="text-gray-400 mt-1">Gérez les créneaux de jeu</p>
           </div>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary flex items-center gap-2">
-          <Plus size={16} />
-          Nouvelle réservation
-        </button>
+
+        {/* BOUTONS */}
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="btn-primary flex items-center gap-2 whitespace-nowrap"
+          >
+            <Plus size={16} />
+            Nouvelle réservation
+          </button>
+        </div>
       </div>
 
-      {/* Table availability */}
+      {/* TABLES */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {tables.map((table) => (
           <div key={table.id} className="card flex items-center justify-between">
@@ -121,7 +146,7 @@ export default function Reservations() {
         ))}
       </div>
 
-      {/* New reservation form */}
+      {/* FORM */}
       {showForm && (
         <div className="card mb-8">
           <h2 className="text-lg font-semibold text-white mb-4">Nouvelle réservation</h2>
@@ -140,6 +165,7 @@ export default function Reservations() {
                 ))}
               </select>
             </div>
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Table</label>
               <select
@@ -154,6 +180,7 @@ export default function Reservations() {
                 ))}
               </select>
             </div>
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Début</label>
               <input
@@ -164,6 +191,7 @@ export default function Reservations() {
                 required
               />
             </div>
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Fin</label>
               <input
@@ -174,16 +202,17 @@ export default function Reservations() {
                 required
               />
             </div>
+
             <div className="col-span-2">
-              <label className="block text-sm text-gray-400 mb-1">Notes (optionnel)</label>
+              <label className="block text-sm text-gray-400 mb-1">Notes</label>
               <input
                 type="text"
                 className="input"
-                placeholder="Tournoi amical, entraînement..."
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
               />
             </div>
+
             <div className="col-span-2 flex gap-3">
               <button type="submit" className="btn-primary">Réserver</button>
               <button type="button" className="btn-secondary" onClick={() => setShowForm(false)}>
@@ -194,40 +223,31 @@ export default function Reservations() {
         </div>
       )}
 
-      {/* Reservations list */}
+      {/* LISTE */}
       <div className="card overflow-hidden p-0">
         <div className="p-4 border-b border-gray-800">
           <h2 className="font-semibold text-white">Réservations à venir</h2>
         </div>
+
         {reservations.length === 0 ? (
           <p className="text-center text-gray-500 py-8">Aucune réservation</p>
         ) : (
           <div className="divide-y divide-gray-800">
             {reservations.map((res) => (
-              <div key={res.id} className="p-4 flex items-center justify-between hover:bg-gray-800/50 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                    <Clock size={18} className="text-green-400" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">
-                      {res.player?.username ?? `Joueur #${res.player_id}`} —{' '}
-                      <span className="text-gray-400">{res.table?.name ?? `Table #${res.table_id}`}</span>
-                    </p>
-                    <p className="text-sm text-gray-400">
-                      {format(new Date(res.start_time), 'EEEE dd MMMM, HH:mm', { locale: fr })} →{' '}
-                      {format(new Date(res.end_time), 'HH:mm', { locale: fr })}
-                    </p>
-                    {res.notes && <p className="text-xs text-gray-500 mt-0.5">{res.notes}</p>}
-                  </div>
+              <div key={res.id} className="p-4 flex items-center justify-between hover:bg-gray-800/50">
+                <div>
+                  <p className="text-white font-medium">
+                    {res.player?.username} — {res.table?.name}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    {format(new Date(res.start_time), 'EEEE dd MMMM, HH:mm', { locale: fr })}
+                  </p>
                 </div>
+
                 <div className="flex items-center gap-3">
                   {statusBadge(res.status)}
                   {res.status === 'confirmed' && (
-                    <button
-                      onClick={() => handleCancel(res.id)}
-                      className="text-red-400 hover:text-red-300 transition-colors"
-                    >
+                    <button onClick={() => handleCancel(res.id)} className="text-red-400">
                       <X size={16} />
                     </button>
                   )}

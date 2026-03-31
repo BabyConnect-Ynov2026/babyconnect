@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom' // <-- import ajouté
 import toast from 'react-hot-toast'
 import homeLogo from '../../assets/img/logo-home-ynov.png'
 import { ReservationModal } from '../components/ReservationModal'
@@ -37,6 +38,7 @@ function getNextReservationSlot(): { start: Date; end: Date } {
 }
 
 export default function Home() {
+  const navigate = useNavigate() // <-- navigate pour le bouton
   const [reservingTable, setReservingTable] = useState<Table | null>(null)
   const [isAutoReserving, setIsAutoReserving] = useState(false)
   const { user } = useAuth()
@@ -104,6 +106,17 @@ export default function Home() {
         />
 
         <HomeHero />
+
+        {/* ── BOUTON TOURNOIS ── */}
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => navigate('/tournaments')}
+            className="rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-black text-white transition-all hover:bg-emerald-600"
+          >
+             Tournois
+          </button>
+        </div>
 
         {cardsError && (
           <div className="mt-6 rounded-3xl border border-red-100 bg-red-50/90 px-5 py-4 text-sm font-semibold text-red-700 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
