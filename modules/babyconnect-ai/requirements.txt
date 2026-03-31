@@ -1,0 +1,14 @@
+# babyconnect-ai — dépendances
+# Installer avec : pip install -r requirements.txt
+
+# Vision
+opencv-python>=4.9.0
+numpy>=1.26.0
+websockets>=12.0
+
+# API REST (optionnel — uniquement si tu utilises api.py)
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# Utilitaires
+python-dotenv>=1.0.0   # pour charger un .env si besoin
