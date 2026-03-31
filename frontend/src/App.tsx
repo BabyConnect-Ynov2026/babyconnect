@@ -7,6 +7,7 @@ import Reservations from './pages/admin/Reservations'
 import Tournaments from './pages/admin/Tournaments'
 import Matches from './pages/admin/Matches'
 import Players from './pages/admin/Players'
+import Profile from './pages/Profile'
 
 export default function App() {
   return (
@@ -28,6 +29,8 @@ export default function App() {
         <Route path="players" element={<Players />} />
         <Route path="*" element={<Navigate to="dashboard" replace />} />
       </Route>
+
+      <Route path="/profile" element={<Profile />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

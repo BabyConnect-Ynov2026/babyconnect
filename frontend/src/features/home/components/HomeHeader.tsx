@@ -28,7 +28,7 @@ export function HomeHeader({
 
         <div className="flex items-center gap-3">
           {currentUser ? (
-            <Link to="/profil">
+            <Link to="/profile">
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.name}
@@ -37,7 +37,7 @@ export function HomeHeader({
             </Link>
           ) : (
             <Link
-              to="/profil"
+              to="/profile"
               className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-600 text-base font-black text-white shadow-[0_10px_30px_rgba(16,185,129,0.35)]"
             >
               Y
@@ -66,7 +66,7 @@ export function HomeHeader({
             <ChevronRight size={16} />
           </Link>
           <Link
-            to="/profil"
+            to="/profile"
             onClick={onCloseMenu}
             className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold text-emerald-700 transition-colors hover:bg-white"
           >

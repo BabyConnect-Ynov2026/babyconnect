@@ -1,11 +1,13 @@
 import { Clock3, Trophy, Users } from 'lucide-react'
+import type { Player } from '../../types'
+
 import type {
   BabyfootCardData,
   BabyfootCardStatusTone,
   CurrentUser,
 } from './types'
 
-export const currentUser: CurrentUser | null = null
+export const currentUser: Player | null = null
 
 export const babyfootCards: BabyfootCardData[] = [
   {
@@ -32,7 +34,7 @@ export const babyfootCards: BabyfootCardData[] = [
     location: 'Hall principal',
     name: 'Baby-foot Hall Principal',
     occupancy: '2/4',
-    status: 'Occupe',
+    status: 'Occupé',
     statusTone: 'busy',
     subtitle: 'Partie en cours',
   },
