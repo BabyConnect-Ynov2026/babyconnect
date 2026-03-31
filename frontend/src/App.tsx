@@ -7,15 +7,15 @@ import Reservations from './pages/admin/Reservations'
 import Tournaments from './pages/admin/Tournaments'
 import Matches from './pages/admin/Matches'
 import Players from './pages/admin/Players'
+import TournamentsHome from './pages/TournamentsHome'
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-
       <Route path="/leaderboard" element={<Navigate to="/admin/leaderboard" replace />} />
-      <Route path="/reservations" element={<Navigate to="/admin/reservations" replace />} />
-      <Route path="/tournaments" element={<Navigate to="/admin/tournaments" replace />} />
+      <Route path="/reservations" element={<Reservations />} />
+      <Route path="/tournaments" element={<TournamentsHome />} />
       <Route path="/matches" element={<Navigate to="/admin/matches" replace />} />
       <Route path="/players" element={<Navigate to="/admin/players" replace />} />
 
