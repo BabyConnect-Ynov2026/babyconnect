@@ -1,22 +1,20 @@
-import { babyfootCards, currentUser } from '../features/home/data'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Player } from '../types'
-import { BabyfootCard } from '../features/home/components/BabyfootCard'
 import { HomeHeader } from '../features/home/components/HomeHeader'
-import { HomeHero } from '../features/home/components/HomeHero'
 import homeLogo from '../../assets/img/logo-home-ynov.png'
 import { useHomeState } from '../features/home/useHomeState'
 
 export default function Profile() {
     const navigate = useNavigate()
-    const user: Player | null = currentUser
+    const [user] = useState<Player | null>(null)
     const { isMenuOpen, closeMenu, toggleMenu } = useHomeState()
 
     return (
         <main className="min-h-screen bg-[#f3f4ef] text-slate-950">
             <div>
                 <HomeHeader
-                    currentUser={currentUser ? { name: currentUser.full_name, avatarUrl: currentUser.avatar_url } : null}
+                    currentUser={user ? { name: user.full_name } : null}
                     isMenuOpen={isMenuOpen}
                     logoSrc={homeLogo}
                     onCloseMenu={closeMenu}
@@ -31,17 +29,9 @@ export default function Profile() {
                         <div className="flex flex-col items-center text-center">
 
                             {/* Avatar */}
-                            {user?.avatar_url ? (
-                                <img
-                                    src={user.avatar_url}
-                                    alt={user.full_name}
-                                    className="h-24 w-24 rounded-full object-cover shadow-sm"
-                                />
-                            ) : (
-                                <div className="h-24 w-24 rounded-full bg-slate-200 flex items-center justify-center text-4xl font-black text-slate-700">
-                                    {user?.full_name?.[0] ?? 'Y'}
-                                </div>
-                            )}
+                            <div className="h-24 w-24 rounded-full bg-slate-200 flex items-center justify-center text-4xl font-black text-slate-700">
+                                {user?.full_name?.[0] ?? 'Y'}
+                            </div>
 
                             <p className="mt-4 text-xl font-black">
                                 {user?.full_name ?? 'Invité'}

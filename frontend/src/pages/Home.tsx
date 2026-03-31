@@ -1,145 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import homeLogo from '../../assets/img/logo-home-ynov.png'
+import { ReservationModal } from '../components/ReservationModal'
+import { BabyfootCard } from '../features/home/components/BabyfootCard'
 import { HomeHeader } from '../features/home/components/HomeHeader'
 import { HomeHero } from '../features/home/components/HomeHero'
 import { ScanNfcButton } from '../features/home/components/ScanNfcButton'
 import { useHomeState } from '../features/home/useHomeState'
-import { ReservationModal } from '../components/ReservationModal'
-import { tablesApi } from '../services/api'
-import { Table } from '../types'
-import { MapPin, Clock, Users } from 'lucide-react'
+import type { Table } from '../types'
 
-// ─── Données enrichies par table (indexées par position dans la liste) ────────
-// Remplace ces données par celles de ton API quand elles seront disponibles
-const MOCK_DATA = [
-  {
-    name: 'Baby-foot Souk',
-    location: 'Souk',
-    occupancy: '2/4',
-    status: 'occupied' as const,
-    timeRemainingSeconds: 514,
-    players: ['Corentin R. (Silver Rank)', 'Lucas M.'],
-  },
-  {
-    name: 'Baby-foot Hall Principal',
-    location: 'Campus',
-    occupancy: '0/4',
-    status: 'free' as const,
-  },
-  {
-    name: 'Baby-foot Salle 104',
-    location: 'Salle 104',
-    occupancy: '4/4',
-    status: 'occupied' as const,
-    timeRemainingSeconds: 302,
-    players: ['Théo B.', 'Mathis D.', 'Enzo P.', 'Nathan G.'],
-  },
-]
-
-// ─── Hook compteur décroissant ────────────────────────────────────────────────
-function useCountdown(initialSeconds?: number) {
-  const [secs, setSecs] = useState<number>(initialSeconds ?? 0)
-
-  useEffect(() => {
-    if (!initialSeconds) return
-    setSecs(initialSeconds)
-    const id = setInterval(() => setSecs((s) => (s > 0 ? s - 1 : 0)), 1000)
-    return () => clearInterval(id)
-  }, [initialSeconds])
-
-  if (!initialSeconds) return null
-  const m = Math.floor(secs / 60).toString().padStart(2, '0')
-  const s = (secs % 60).toString().padStart(2, '0')
-  return `${m}:${s}`
-}
-
-// ─── Carte individuelle ───────────────────────────────────────────────────────
-type MockEntry = (typeof MOCK_DATA)[number]
-
-function TableCard({
-  table,
-  mock,
-  onReserve,
-}: {
-  table: Table
-  mock: MockEntry
-  onReserve: () => void
-}) {
-  const countdown = useCountdown(
-    mock.status === 'occupied' ? mock.timeRemainingSeconds : undefined
-  )
-  const isFree = mock.status === 'free'
-
-  return (
-    <div
-      className={`flex flex-col gap-3 p-5 rounded-2xl shadow-sm border border-black/5 ${
-        isFree ? 'bg-gradient-to-br from-emerald-50 via-white to-white' : 'bg-white'
-      }`}
-    >
-      {/* Nom + occupancy */}
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-xl font-black text-slate-900 leading-tight">{mock.name}</h3>
-        <span className="text-sm font-black text-slate-500 whitespace-nowrap pt-0.5">
-          {mock.occupancy}
-        </span>
-      </div>
-
-      {/* Localisation */}
-      <div className="flex items-center gap-1.5 text-sm text-slate-500 font-medium">
-        <MapPin size={13} className="text-emerald-500" />
-        {mock.location}
-      </div>
-
-      {/* Badge statut + label */}
-      <div className="flex items-center gap-3">
-        {isFree ? (
-          <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full">
-            Disponible
-          </span>
-        ) : (
-          <span className="text-xs font-black uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1 rounded-full">
-            Occupé
-          </span>
-        )}
-        <span className="text-sm text-slate-400 font-medium">
-          {isFree ? 'Prêt pour la prochaine partie' : 'Partie en cours'}
-        </span>
-      </div>
-
-      {/* Détails si occupé */}
-      {mock.status === 'occupied' && (
-        <div className="flex flex-col gap-1.5 mt-1">
-          {countdown !== null && (
-            <div className="flex items-center gap-1.5 text-sm text-slate-500">
-              <Clock size={13} className="text-slate-400" />
-              Reste {countdown}
-            </div>
-          )}
-          {'players' in mock && mock.players && mock.players.length > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-slate-500">
-              <Users size={13} className="text-slate-400" />
-              {mock.players.join(' · ')}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Spacer pour aligner le bouton en bas */}
-      <div className="flex-grow" />
-
-      {/* CTA */}
-      <button
-        onClick={onReserve}
-        className="mt-2 w-full bg-emerald-500 text-white py-3 px-6 rounded-2xl text-sm font-black hover:bg-emerald-600 transition-all"
-      >
-        Réserver cette table
-      </button>
-    </div>
-  )
-}
-
-// ─── Page principale ──────────────────────────────────────────────────────────
 export default function Home() {
+  const [reservingTable, setReservingTable] = useState<Table | null>(null)
   const {
     cards,
     cardsError,
@@ -152,9 +22,8 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#f3f4ef] text-slate-950">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-36 sm:px-6 lg:px-8">
-
         <HomeHeader
-          currentUser={null}   // ✔️ Player | null
+          currentUser={null}
           isMenuOpen={isMenuOpen}
           logoSrc={homeLogo}
           onCloseMenu={closeMenu}
@@ -163,20 +32,41 @@ export default function Home() {
 
         <HomeHero />
 
-        <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tables.length === 0 ? (
-            <p className="text-sm text-slate-400 col-span-3">Chargement des tables...</p>
-          ) : (
-            tables.map((table, index) => (
-              <TableCard
-                key={table.id}
-                table={table}
-                mock={MOCK_DATA[index % MOCK_DATA.length]}
-                onReserve={() => setReservingTable(table)}
-              />
-            ))
-          )}
-        </section>
+        {cardsError && (
+          <div className="mt-6 rounded-3xl border border-red-100 bg-red-50/90 px-5 py-4 text-sm font-semibold text-red-700 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
+            {cardsError}
+          </div>
+        )}
+
+        {isLoadingCards && (
+          <div className="mt-6 rounded-3xl border border-black/5 bg-white/80 px-5 py-6 text-sm font-semibold text-slate-600 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
+            Chargement des tables...
+          </div>
+        )}
+
+        {!isLoadingCards && cards.length > 0 && (
+          <section className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {cards.map((card) => (
+              <div key={card.id} className="flex h-full flex-col gap-3">
+                <BabyfootCard card={card} />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setReservingTable({
+                      available: card.status === 'free',
+                      id: card.id,
+                      location: card.location,
+                      name: card.name,
+                    })
+                  }
+                  className="w-full rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-black text-white transition-all hover:bg-emerald-600"
+                >
+                  Réserver cette table
+                </button>
+              </div>
+            ))}
+          </section>
+        )}
 
         {!isLoadingCards && cards.length === 0 && !cardsError && (
           <div className="mt-6 rounded-3xl border border-black/5 bg-white/80 px-5 py-6 text-sm font-semibold text-slate-600 shadow-[0_22px_50px_rgba(15,23,42,0.08)]">
